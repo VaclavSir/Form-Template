@@ -1,0 +1,50 @@
+Formulářová šablona
+===================
+
+Základní použití šablony:
+
+/---html
+{includeblock '@form.latte', form => $form}
+\---
+
+Tím se vykreslí formulář velmi podobně, jako by ho vykreslil "DefaultFormRenderer":[api:Nette\Forms\Rendering\DefaultFormRenderer].
+
+Rozdíl je v tom, že tahle šablona definuje různé bloky, které umožňují předefinovat vykreslení některých částí formuláře. Pokud například chcete formulář vykreslit "normálně" a pouze pole `title` chcete vykreslit jinak, provedete to takto:
+
+/---html
+{define #renderPair_title}
+	<tr id="title"><th>{label title /}</th><td>{control title}</td></tr>
+{/define}
+
+{includeblock '@form.latte', form => $form}
+\---
+
+Názvy definovaných bloků vychází z názvů metod DefaultFormRendereru:
+
+|------------------------------------------------------------------------
+| Název bloku        | Dostupné proměnné         | &nbsp;
+|------------------------------------------------------------------------
+| `renderForm`          | $form
+| `renderErrors`        | $form
+| `renderBody`          | $form
+| `renderGroup`         | $form, $group
+| `renderGroup_NÁZEV`   | $form, $group
+| `renderControls`      | $form, $group
+| `renderControls_begin`| $form, $group          | `<table>`
+| `renderControls_end`  | $form, $group          | `</table>`
+| `renderPair`          | $form, $group, $field
+| `renderPair_NÁZEV`    | $form, $group, $field
+| `renderControl`       | $form, $group, $field
+| `renderControl_NÁZEV` | $form, $group, $field
+| `renderLabel`         | $form, $group, $field
+| `renderLabel_NÁZEV`   | $form, $group, $field
+| `renderPairMulti`     | $form, $group, $fields | (Používá se pro vykreslení tlačítek.)
+
+
+Poznámky k implementaci
+-----------------------
+
+- Pokud ve skupině není žádný vykreslitelný control, tak se stejně vykreslí `<table></table>`. Dalo by se to řešit, ale šablona by se tím na můj vkus už příliš znečitelnila.
+- Kontejner pro label je `<th></th>` i u buttonů a checkboxů.
+- Formulářová makra {input} a {label} nepoužívám, protože hází dračí chybu na příkladu s jmennými kontejnery.
+- Translator je zatím ignorován.

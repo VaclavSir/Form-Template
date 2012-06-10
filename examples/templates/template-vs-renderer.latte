@@ -1,0 +1,74 @@
+﻿<html>
+<head>
+	<title>Ukázka @form.latte</title>
+	
+	<style type="text/css">
+	
+	body {
+		background: #fff;
+		color: #000;
+		font-family: Times New Roman, serif;
+	}
+	
+	form {
+		font-family: Garamond, Times, serif;
+		margin: 0.5em;
+	}
+	
+	form table {
+		border: 1px solid #aaa;
+		padding: 0.5em;
+	}
+	
+	.required {
+		background: #FF6;
+	}
+	
+	/* subgroup in Forms.example.001.phpt */
+	#sendBox {
+		margin-top: 0.5em;
+		padding: 0.5em;
+		border: 2px solid #99F;
+	}
+	</style>
+
+</head>
+
+<body>
+
+<h1>@form.latte vs. DefaultFormRenderer</h1>
+
+{$sourceSelectForm}
+
+<h2>Porovnání výstupu</h2>
+
+<table border="1" width="100%">
+<tr>
+	<th>{$formTemplate}</th>
+	<th>DefaultFormRenderer</th>
+</tr>
+<tr valign="top">
+	<td>{include $formTemplate, form => $form}</td>
+	<td>{$form}</td>
+</tr>
+
+</table>
+
+<h2>Porovnání zdrojáků:</h2>
+<table border="1">
+<tr>
+	<th>{$formTemplate}</th>
+	<th>DefaultFormRenderer</th>
+	<th>Definice formuláře</th>
+</tr>
+<tr valign="top">
+	<td><pre style="width: 300px; overflow: scroll;">{include $formTemplate, form => $form|escape}</pre></td>
+	<td><pre style="width: 300px; overflow: scroll;">{$form|escape}</pre></td>
+	<td><pre style="width: 300px; overflow: scroll;">{$definition}</pre></td>
+</tr>
+</table>
+
+<br><br>
+
+</body>
+</html>

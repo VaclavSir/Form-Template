@@ -1,0 +1,43 @@
+{layout 'basic.latte'}
+
+{define #renderErrors}
+<pre n:if="$form->errors">
+    .
+   / \ 
+  / ! \   There's been {if count($form->errors) > 1}some errors{else}an error{/if}:
+ /_____\
+
+{foreach $form->errors as $error}
+  * {$error}
+{/foreach}
+</pre>
+{/define}
+
+
+{define #renderControl}
+	{if $field instanceof Nette\Forms\Controls\Button}
+		<code>[__{$field->caption}__]</code>
+	{elseif $field instanceof Nette\Forms\Controls\Checkbox}
+		<code>[{if $field->value}x{else}_{/if}] {$field->label}</code>
+	{elseif $field instanceof Nette\Forms\Controls\SelectBox}
+		<code>[______________|v]</code>
+	{elseif $field instanceof Nette\Forms\Controls\RadioList}
+		{foreach $field->items as $item}
+		<code>(_) {$item}<br></code>
+		{/foreach}
+	{elseif $field instanceof Nette\Forms\Controls\UploadControl}
+		<code>[Vybrat soubor] Soubor nevybrán</code>
+	{elseif $field instanceof Nette\Forms\Controls\TextArea}
+<pre>
++------------------------------+
+|                              |
+|                              |
+|                              |
+|                              |
+|                              |
++------------------------------+
+</pre>
+	{else}
+		<code>[__________________]</code>
+	{/if}
+{/define}

@@ -1,0 +1,18 @@
+{layout 'basic.latte'}
+
+{block #renderControls_begin}
+<dl>
+{/block}
+
+{block #renderControls_end}
+</dl>
+{/block}
+
+{block #renderPair}
+	<dt n:class="$field->required ? required">{include #renderLabel field => $field}</dt>
+	<dd n:class="$field->required ? required">{include #renderControl field => $field}</dd>
+{/block}
+
+{block #renderPairMulti}
+	<dd>{foreach $fields as $field}{include #renderControl field => $field}{/foreach}</dd>
+{/block}

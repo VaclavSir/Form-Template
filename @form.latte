@@ -1,0 +1,70 @@
+{**
+ * Default render of a form.
+ *
+ * @param Nette\Forms\Form $form
+ *}
+
+{block #renderForm}
+{form $form}
+{foreach $form->controls as $control}{? $control->setOption('rendered', false)}{/foreach}
+
+<ul n:block="#renderErrors" n:if="$form->errors" class="errors">
+	<li n:foreach="$form->errors as $error">{$error}</li>
+</ul>
+
+{block #renderBody}
+{foreach $form->groups as $groupName => $group}
+
+{block #renderGroup}{block #renderGroup_$groupName}
+
+{? $_groupContainer = $group->getOption('container', Nette\Utils\Html::el('fieldset'))}
+{!$_groupContainer->startTag()}
+<legend n:if="$group->getOption('label')">{$group->getOption('label')}</legend>
+<p n:if="$group->getOption('description')">{$group->getOption('description')}</p>
+
+{block #renderControls}
+{block #renderControls_begin}<table>{/block}
+
+{? $_buttons = null}
+{foreach $group->controls as $field}
+{if !$field->getOption('rendered') && !($field instanceof Nette\Forms\Controls\HiddenField) && ($control->getForm(FALSE) === $form)}
+	{if $field instanceof Nette\Forms\Controls\Button}
+		{? $_buttons[] = $field}
+	{else}
+		{if $_buttons}{include #renderPairMulti, fields => $_buttons}{/if}{? $_buttons = null}
+		{block #renderPair}{block #renderPair_$field->name}<tr n:class="$field->required ? required">
+			<th>{block #renderLabel}{block #renderLabel_$field->name}{if $field instanceof Nette\Forms\Controls\Checkbox || $field instanceof Nette\Forms\Controls\Button}&nbsp;{else}{$field->label}{/if}{/block #renderLabel_$field->name}{/block #renderLabel}</th>
+			<td>{block #renderControl}{block #renderControl_$field->name}{$field->control}{if $field instanceof Nette\Forms\Controls\Checkbox || $field instanceof Nette\Forms\Controls\Button} {$field->label}{/if}{/block #renderControl_$field->name}{/block #renderControl}</td>
+		</tr>{/block #renderPair_$field->name}{/block #renderPair}
+	{/if}
+{/if}
+{? $field->control->setOption('rendered', true)}{/foreach}
+
+{define #renderPairMulti}
+	<tr>
+		<td>&nbsp;</td>
+		<td>{foreach $fields as $field}{include #renderControl, field => $field}{/foreach}</td>
+	</tr>
+{/define #renderPairMulti}
+{if $_buttons}{include #renderPairMulti, fields => $_buttons}{/if}
+{? $_buttons = null}
+
+{block #renderControls_end}</table>{/block}
+{/block #renderControls}
+
+{if $group->getOption('embedNext') && $iterator->hasNext()}
+	{? $iterator->next()}
+	{include #renderGroup, group => $iterator->current(), groupName => $iterator->key()}
+{/if}
+
+{!$_groupContainer->endTag()}
+{/block #renderGroup_$groupName}{/block #renderGroup}
+
+{/foreach}
+
+{include #renderControls, group => $form}
+
+{/block #renderBody}
+
+{/form}
+{/block #renderForm}
