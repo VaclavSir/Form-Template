@@ -37,8 +37,9 @@
 			<td>{block #renderControl}{block #renderControl_$field->name}{$field->control}{if $field instanceof Nette\Forms\Controls\Checkbox || $field instanceof Nette\Forms\Controls\Button} {$field->label}{/if}{/block #renderControl_$field->name}{/block #renderControl}</td>
 		</tr>{/block #renderPair_$field->name}{/block #renderPair}
 	{/if}
+	{? $field->control->setOption('rendered', true)}
 {/if}
-{? $field->control->setOption('rendered', true)}{/foreach}
+{/foreach}
 
 {define #renderPairMulti}
 	<tr>
@@ -66,5 +67,8 @@
 
 {/block #renderBody}
 
+{block #renderHiddens}
+<div>{foreach $form->getComponents(true, 'Nette\Forms\Controls\HiddenField') as $field}{if !$field->getOption('rendered')}{$field->control}{/if}{/foreach}</div>
+{/block #renderHiddens}
 {/form}
 {/block #renderForm}

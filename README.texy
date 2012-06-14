@@ -29,6 +29,7 @@ Názvy definovaných bloků vychází z názvů metod DefaultFormRendereru:
 | `renderForm`          | $form
 | `renderErrors`        | $form
 | `renderBody`          | $form
+| `renderHiddens`       | $form
 | `renderGroup`         | $form, $group
 | `renderGroup_NÁZEV`   | $form, $group
 | `renderControls`      | $form, $group
